@@ -398,6 +398,8 @@ class soundplay:
         except Exception, e:
             rospy.logerr('Exception in actionlib callback: %s'%str(e))
             rospy.loginfo(traceback.format_exc())
+            rospy.logerr('Failed to generate sound instance because Gstreamer opens too many files. Shutdown process for respawn.')
+            rospy.signal_shutdown('shutdown_for_respawn')
         finally:
             self.mutex.release()
             rospy.logdebug("done actionlib callback")
