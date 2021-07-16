@@ -302,7 +302,7 @@ class SoundClient(object):
     def stopAll(self):
         self.stop(SoundRequest.ALL)
 
-    def sendMsg(self, snd, cmd, s, arg2="", vol=1.0, **kwargs):
+    def sendMsg(self, snd, cmd, s, arg2="", vol=1.0, replace=True, **kwargs):
         """
         Internal method that publishes the sound request, either directly as a
         SoundRequest to the soundplay_node or through the actionlib interface
@@ -347,7 +347,7 @@ class SoundClient(object):
             self.actionclient.wait_for_server()
             goal = SoundRequestGoal()
             goal.sound_request = msg
-            while self._playing:
+            while not replace and self._playing:
                 rospy.sleep(0.1)
             self.actionclient.send_goal(goal)
             self.actionclient.wait_for_result()
