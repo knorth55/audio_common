@@ -396,6 +396,12 @@ class soundplay:
                 self.stopall()
             else:
                 sound = self.select_sound(data)
+
+                if sound is None:
+                    rospy.logerr('Failed to select sound.')
+                    self._as.set_aborted()
+                    return
+
                 sound.command(data.command)
 
                 r = rospy.Rate(self.loop_rate)
